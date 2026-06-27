@@ -1,3 +1,5 @@
+![Status](https://shields.io)
+
 # SaaS Multi-Tenant Monorepo
 
 Vollständiges Template für ein skalierbares SaaS-System mit Next.js Frontend und NestJS Backend in einem Monorepo.
