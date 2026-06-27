@@ -11,12 +11,12 @@ services:
       POSTGRES_DB: ${DB_NAME:-saas_db}
       POSTGRES_INITDB_ARGS: --encoding=UTF8
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - '${DB_PORT:-5432}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-saas_user}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-saas_user}']
       interval: 10s
       timeout: 5s
       retries: 5

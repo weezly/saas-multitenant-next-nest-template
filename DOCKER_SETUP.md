@@ -224,23 +224,27 @@ docker-compose restart postgres
 ## Entwicklungs-Workflow
 
 1. **PostgreSQL starten:**
+
    ```bash
    docker-compose up -d postgres
    ```
 
 2. **Backend starten (lokal):**
+
    ```bash
    cd apps/service
    npm run start:dev
    ```
 
 3. **Frontend starten (lokal):**
+
    ```bash
    cd apps/app
    npm run dev
    ```
 
 4. **Database migrieren (falls nötig):**
+
    ```bash
    cd apps/service
    npm run prisma:migrate dev
