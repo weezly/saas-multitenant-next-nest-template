@@ -1,4 +1,6 @@
-![Status](https://shields.io)
+
+![Status](https://img.shields.io/badge/status-WIP-orange)
+
 
 # SaaS Multi-Tenant Monorepo
 
