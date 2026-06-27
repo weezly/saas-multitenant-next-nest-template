@@ -23,7 +23,7 @@ export interface ProviderInfo {
  * @returns {Object} Provider-Informationen und Hilfsfunktionen
  */
 export function useAuthProviders() {
-  const { data: session } = useSession();
+  const { data: _session } = useSession();
 
   // Diese Informationen sollten vom Server kommen via API
   // Hier nur Client-seitige Hilfs-Funktionen

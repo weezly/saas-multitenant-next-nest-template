@@ -1,5 +1,5 @@
 import './auth.types';
-import { loadProviders } from './providers';
+import { loadProviders } from './auth/providers';
 
 /**
  * NextAuth Konfiguration mit Multi-Tenant & Dynamic Provider Support

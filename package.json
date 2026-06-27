@@ -5,7 +5,9 @@
   "description": "SaaS Multi-tenant Monorepo with Next.js and NestJS",
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
-    "build": "pnpm -r --filter='./packages/**' build && pnpm -r --filter='./apps/**' build",
+    "build": "pnpm -r build",
+    "build:apps": "pnpm -r --filter='saas-app' --filter='saas-service' build",
+    "build:packages": "pnpm -r --filter='@saas/shared' build",
     "lint": "pnpm -r run lint",
     "format": "pnpm -r run format",
     "type-check": "pnpm -r run type-check"
