@@ -1,0 +1,132 @@
+// Prisma Schema for Multi-Tenant SaaS Application
+// Documentation: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================
+// USER MODEL
+// =====================
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String?  // Optional for OAuth users
+  name      String?
+  provider  String   @default("credentials") // credentials, google, github, etc.
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations: User kann in mehreren Tenants Mitglied sein
+  memberships Membership[]
+
+  @@map("users")
+}
+
+// =====================
+// TENANT MODEL
+// =====================
+model Tenant {
+  id    String @id @default(cuid())
+  name  String
+  slug  String @unique // For subdomain or URL
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  memberships Membership[]
+  roles       Role[]
+  projects    Project[]
+
+  @@map("tenants")
+}
+
+// =====================
+// MEMBERSHIP MODEL
+// =====================
+// Many-to-Many Beziehung zwischen User und Tenant mit zusätzlicher Role
+model Membership {
+  id       String @id @default(cuid())
+  
+  // Foreign Keys
+  userId   String
+  tenantId String
+  roleId   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Restrict)
+
+  // Constraints & Indexes
+  @@unique([userId, tenantId])
+  @@index([userId])
+  @@index([tenantId])
+  @@index([roleId])
+  @@map("memberships")
+}
+
+// =====================
+// ROLE MODEL
+// =====================
+// Rollen sind pro Tenant individuell definierbar (NICHT global!)
+model Role {
+  id    String @id @default(cuid())
+  
+  // Rollenname (z.B. "Owner", "Admin", "Editor", "Viewer")
+  name  String
+  
+  // Foreign Key to Tenant
+  tenantId String
+
+  // Permissions als JSON
+  // Beispiel: { "projects": ["create", "read", "update"], "users": ["read"] }
+  permissions Json @default("{}")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships Membership[]
+
+  // Constraints & Indexes
+  @@unique([tenantId, name]) // Rollenname muss pro Tenant eindeutig sein
+  @@index([tenantId])
+  @@map("roles")
+}
+
+// =====================
+// PROJECT MODEL
+// =====================
+// Projekte gehören zu einem Tenant
+model Project {
+  id    String @id @default(cuid())
+  
+  name  String
+  description String?
+  
+  // Foreign Key to Tenant
+  tenantId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  // Constraints & Indexes
+  @@unique([tenantId, name]) // Projektname pro Tenant eindeutig
+  @@index([tenantId])
+  @@map("projects")
+}
