@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: saas-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-saas_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-saas_password}
+      POSTGRES_DB: ${DB_NAME:-saas_db}
+      POSTGRES_INITDB_ARGS: --encoding=UTF8
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-saas_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  # NestJS Backend (optional - uncomment to run in container)
+  # service:
+  #   build:
+  #     context: ./apps/service
+  #     dockerfile: Dockerfile
+  #   container_name: saas-service
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 3001
+  #     DATABASE_URL: postgresql://${DB_USER:-saas_user}:${DB_PASSWORD:-saas_password}@postgres:5432/${DB_NAME:-saas_db}
+  #     CORS_ORIGIN: http://localhost:3000
+  #     JWT_SECRET: ${JWT_SECRET:-your-secret-key-min-32-characters-change-this-in-production}
+  #     JWT_EXPIRES_IN: 7d
+  #     FRONTEND_URL: http://localhost:3000
+  #   ports:
+  #     - "3001:3001"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #   volumes:
+  #     - ./apps/service/src:/app/src
+  #   networks:
+  #     - saas-network
+  #   restart: unless-stopped
+
+  # Next.js Frontend (optional - uncomment to run in container)
+  # app:
+  #   build:
+  #     context: ./apps/app
+  #     dockerfile: Dockerfile
+  #   container_name: saas-app
+  #   environment:
+  #     NODE_ENV: development
+  #     NEXT_PUBLIC_API_URL: http://localhost:3001
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - service
+  #   volumes:
+  #     - ./apps/app/src:/app/src
+  #   networks:
+  #     - saas-network
+  #   restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  saas-network:
+    driver: bridge
