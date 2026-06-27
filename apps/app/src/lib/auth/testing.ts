@@ -4,7 +4,12 @@
  * Kleine Hilfsfunktionen zum Testen und Debuggen der Provider-Konfiguration
  */
 
-import { loadProviders, getEnabledProviderNames, isProviderEnabled, VALID_PROVIDERS } from './providers';
+import {
+  loadProviders,
+  getEnabledProviderNames,
+  isProviderEnabled,
+  VALID_PROVIDERS,
+} from './providers';
 
 /**
  * Teste die Provider-Konfiguration
@@ -30,9 +35,7 @@ export function testProviderConfiguration(): void {
     if (enabled) {
       const requiredVars = getRequiredEnvVars(provider);
       if (requiredVars.length > 0) {
-        const configured = requiredVars.every(
-          (v) => process.env[v]
-        );
+        const configured = requiredVars.every((v) => process.env[v]);
         console.log(
           `    └─ ${configured ? '✓ Configured' : '✗ Missing'}: ${requiredVars.join(', ')}`
         );
@@ -52,11 +55,7 @@ function getRequiredEnvVars(provider: string): string[] {
     credentials: [],
     google: ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'],
     github: ['GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET'],
-    microsoft: [
-      'MICROSOFT_CLIENT_ID',
-      'MICROSOFT_CLIENT_SECRET',
-      'MICROSOFT_TENANT',
-    ],
+    microsoft: ['MICROSOFT_CLIENT_ID', 'MICROSOFT_CLIENT_SECRET', 'MICROSOFT_TENANT'],
   };
 
   return requiredVars[provider] || [];
@@ -97,9 +96,7 @@ export function debugAuthConfig(): {
   }
 
   const summary =
-    enabled.length > 0
-      ? `✓ ${enabled.length} provider(s) configured`
-      : '✗ No providers configured';
+    enabled.length > 0 ? `✓ ${enabled.length} provider(s) configured` : '✗ No providers configured';
 
   return { enabled, missing, misconfigured, summary };
 }

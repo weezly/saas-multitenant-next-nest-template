@@ -42,14 +42,13 @@ interface ProviderStatus {
  * @returns Array von aktiven Provider-Konfigurationen
  */
 export function loadProviders(): ProviderConfig[] {
-  const enabledProviders = process.env.AUTH_PROVIDERS?.split(',')
-    .map((p) => p.trim().toLowerCase())
-    .filter(Boolean) || [];
+  const enabledProviders =
+    process.env.AUTH_PROVIDERS?.split(',')
+      .map((p) => p.trim().toLowerCase())
+      .filter(Boolean) || [];
 
   if (enabledProviders.length === 0) {
-    console.warn(
-      '[Auth] No providers configured. Set AUTH_PROVIDERS environment variable.'
-    );
+    console.warn('[Auth] No providers configured. Set AUTH_PROVIDERS environment variable.');
     return [];
   }
 
@@ -59,7 +58,9 @@ export function loadProviders(): ProviderConfig[] {
   for (const providerName of enabledProviders) {
     // Validiere Provider-Namen
     if (!AVAILABLE_PROVIDERS[providerName]) {
-      console.warn(`[Auth] Unknown provider: ${providerName}. Valid: ${VALID_PROVIDERS.join(', ')}`);
+      console.warn(
+        `[Auth] Unknown provider: ${providerName}. Valid: ${VALID_PROVIDERS.join(', ')}`
+      );
       status.push({
         name: providerName,
         enabled: false,
@@ -123,11 +124,7 @@ function isProviderConfigured(name: string, provider: ProviderConfig): boolean {
     case 'github':
       return !!(provider.clientId && provider.clientSecret);
     case 'microsoft':
-      return !!(
-        provider.clientId &&
-        provider.clientSecret &&
-        process.env.MICROSOFT_TENANT
-      );
+      return !!(provider.clientId && provider.clientSecret && process.env.MICROSOFT_TENANT);
     default:
       return false;
   }
@@ -154,9 +151,10 @@ function logProviderStatus(status: ProviderStatus[]): void {
  * Hilfsfunktion: Prüfe, ob ein bestimmter Provider aktiv ist
  */
 export function isProviderEnabled(providerName: string): boolean {
-  const enabled = process.env.AUTH_PROVIDERS?.split(',')
-    .map((p) => p.trim().toLowerCase())
-    .includes(providerName.toLowerCase()) || false;
+  const enabled =
+    process.env.AUTH_PROVIDERS?.split(',')
+      .map((p) => p.trim().toLowerCase())
+      .includes(providerName.toLowerCase()) || false;
 
   return enabled;
 }

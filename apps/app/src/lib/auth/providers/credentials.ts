@@ -55,9 +55,7 @@ export const credentialsProvider = {
       };
     } catch (error) {
       console.error('Credentials auth error:', error);
-      throw new Error(
-        error instanceof Error ? error.message : 'Authentication failed'
-      );
+      throw new Error(error instanceof Error ? error.message : 'Authentication failed');
     }
   },
 };

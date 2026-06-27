@@ -39,12 +39,12 @@ Nur die konfigurierten Provider erscheinen auf der Login-Seite! 🎉
 
 ## 📋 Unterstützte Provider
 
-| Provider | ENV-Name | Anforderung | Optional |
-|----------|----------|------------|----------|
-| **Credentials** | `credentials` | ✅ Default (keine Config) | - |
-| **Google** | `google` | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | ✅ |
-| **GitHub** | `github` | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | ✅ |
-| **Microsoft** | `microsoft` | `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, `MICROSOFT_TENANT` | ✅ Vorbereitet |
+| Provider        | ENV-Name      | Anforderung                                                          | Optional       |
+| --------------- | ------------- | -------------------------------------------------------------------- | -------------- |
+| **Credentials** | `credentials` | ✅ Default (keine Config)                                            | -              |
+| **Google**      | `google`      | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`                           | ✅             |
+| **GitHub**      | `github`      | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`                           | ✅             |
+| **Microsoft**   | `microsoft`   | `MICROSOFT_CLIENT_ID`, `MICROSOFT_CLIENT_SECRET`, `MICROSOFT_TENANT` | ✅ Vorbereitet |
 
 ---
 
@@ -66,6 +66,7 @@ AUTH_PROVIDERS=credentials
 ```
 
 **Verhalten:**
+
 - Provider in der Liste → werden geladen & auf Login-Seite angeboten
 - Provider nicht in der Liste → ignoriert
 - Ungültige Einträge → Warnung in Logs, wird übersprungen
@@ -83,6 +84,7 @@ AUTH_PROVIDERS=credentials
 ```
 
 Authentifiziert über Backend API:
+
 ```
 POST /api/auth/login
 { "email": "user@example.com", "password": "..." }
@@ -185,10 +187,7 @@ MICROSOFT_TENANT=common  # oder spezifische Tenant ID
 ### Helper-Funktionen
 
 ```typescript
-import { 
-  isProviderEnabled, 
-  getEnabledProviderNames 
-} from '@/lib/auth/providers';
+import { isProviderEnabled, getEnabledProviderNames } from '@/lib/auth/providers';
 
 // Prüfe, ob Provider aktiv ist
 if (isProviderEnabled('google')) {
@@ -333,6 +332,7 @@ AUTH_PROVIDERS=credentials,google,github,microsoft pnpm dev
 ```
 
 **Lösung:**
+
 ```bash
 # Prüfe ENV-Variablen
 echo $GOOGLE_CLIENT_ID
@@ -348,6 +348,7 @@ Error: Callback URL mismatch
 ```
 
 **Lösung:**
+
 1. Prüfe in Provider-Settings (Google/GitHub/etc.) die Redirect URI
 2. Muss exakt mit `http://localhost:3000/api/auth/callback/[provider]` übereinstimmen
 3. In Production: Nutze domain.com statt localhost
@@ -359,6 +360,7 @@ Error: [next-auth] 'NEXTAUTH_SECRET' env variable is required
 ```
 
 **Lösung:**
+
 ```bash
 # Generiere Secret
 openssl rand -base64 32

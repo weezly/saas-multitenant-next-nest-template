@@ -87,11 +87,7 @@ export function ExampleSignInPage() {
                 disabled={isLoading}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
               >
-                <svg
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   {/* Google Icon SVG */}
                 </svg>
                 <span className="ml-2">Sign in with Google</span>
@@ -104,11 +100,7 @@ export function ExampleSignInPage() {
                 disabled={isLoading}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
               >
-                <svg
-                  className="w-5 h-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   {/* GitHub Icon SVG */}
                 </svg>
                 <span className="ml-2">Sign in with GitHub</span>
@@ -180,9 +172,7 @@ export function ExampleSignInPage() {
 
         {/* Nur OAuth, keine Credentials */}
         {!hasCredentials && hasMultiple && (
-          <p className="text-center text-sm text-gray-600">
-            Choose a provider above to sign in
-          </p>
+          <p className="text-center text-sm text-gray-600">Choose a provider above to sign in</p>
         )}
       </div>
     </div>
