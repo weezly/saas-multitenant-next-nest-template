@@ -1,49 +1,17 @@
 import './auth.types';
+import { loadProviders } from './providers';
 
 /**
- * NextAuth Konfiguration mit Multi-Tenant Support
+ * NextAuth Konfiguration mit Multi-Tenant & Dynamic Provider Support
+ *
+ * Provider werden dynamisch via AUTH_PROVIDERS ENV-Variable geladen
+ * Syntax: AUTH_PROVIDERS=credentials,google,github
+ *
  * Für NextAuth v5 beta - minimale Type Annotations
  */
 
 export const authOptions = {
-  providers: [
-    {
-      id: 'credentials' as const,
-      name: 'Credentials' as const,
-      type: 'credentials' as const,
-      credentials: {
-        email: { label: 'Email', type: 'email', placeholder: 'user@example.com' },
-        password: { label: 'Password', type: 'password' },
-      },
-      authorize: async (credentials: any) => {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Invalid credentials');
-        }
-
-        try {
-          // TODO: Passwort validieren mit Backend
-          // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-          //   method: 'POST',
-          //   body: JSON.stringify(credentials),
-          //   headers: { 'Content-Type': 'application/json' },
-          // });
-          // const user = await response.json();
-
-          // Mock User für Demo
-          const user = {
-            id: 'user-123',
-            email: credentials.email,
-            name: 'Test User',
-            image: null,
-          };
-
-          return user;
-        } catch {
-          throw new Error('Authorization failed');
-        }
-      },
-    },
-  ],
+  providers: loadProviders(),
 
   callbacks: {
     jwt: async (params: any) => {
